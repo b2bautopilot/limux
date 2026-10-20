@@ -14,9 +14,20 @@ permissions:
 
 jobs:
   rpm:
-    runs-on: ubuntu-24.04
+    runs-on: {group: Public-local, labels: [self-hosted, Linux, X64]}
 
+    container: ubuntu:24.04
+    defaults:
+      run:
+        shell: bash
     steps:
+      - name: Prepare Ubuntu container tools
+        working-directory: ${{ github.workspace }}
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends sudo ca-certificates curl git git-lfs jq unzip xz-utils python3 python3-venv python3-pip build-essential pkg-config libssl-dev libncurses-dev file wget gnupg
       - name: Check out repository
         uses: actions/checkout@v7
         with:
